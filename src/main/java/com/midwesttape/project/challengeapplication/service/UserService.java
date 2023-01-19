@@ -7,6 +7,8 @@ import org.springframework.dao.EmptyResultDataAccessException;
 import org.springframework.jdbc.core.JdbcTemplate;
 import org.springframework.stereotype.Service;
 
+import java.util.Set;
+
 @Service
 @RequiredArgsConstructor
 public class UserService {
@@ -41,4 +43,19 @@ public class UserService {
 
     }
 
+    public User updateUserAttribute(long userId, String attribute, String newValue){
+        Set<String> allowedAttributes = Set.of("firstName", "lastName", "username", "password");
+        if(!allowedAttributes.contains(attribute)){
+            throw new IllegalArgumentException("Only " + allowedAttributes + " can be updated");
+        }
+        template.update("update User set " + attribute + " = ? where id = ?", newValue, userId);
+        return user(userId);
+
+    }
+
+    public User updateUser(User updatedUser) {
+        template.update("update User set firstName = ?, lastName = ?, password = ?, username = ? where id = ?",
+            updatedUser.getFirstName(), updatedUser.getLastName(), updatedUser.getPassword(), updatedUser.getUsername(), updatedUser.getId());
+        return updatedUser;
+    }
 }
