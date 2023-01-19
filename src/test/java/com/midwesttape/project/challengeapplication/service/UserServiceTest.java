@@ -8,6 +8,7 @@ import org.mockito.Mock;
 import org.mockito.junit.jupiter.MockitoExtension;
 import org.springframework.jdbc.core.BeanPropertyRowMapper;
 import org.springframework.jdbc.core.JdbcTemplate;
+import org.springframework.jdbc.core.RowMapper;
 
 import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.mockito.ArgumentMatchers.*;
@@ -33,7 +34,7 @@ class UserServiceTest {
 
         final User user = new User();
 
-        when(template.queryForObject(anyString(), isA(BeanPropertyRowMapper.class), eq(USER_ID))).thenReturn(user);
+        when(template.queryForObject(anyString(), isA(RowMapper.class), eq(USER_ID))).thenReturn(user);
 
         final User resultUser = userService.user(USER_ID);
 
